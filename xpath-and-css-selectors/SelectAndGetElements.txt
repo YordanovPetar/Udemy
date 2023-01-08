@@ -1,0 +1,167 @@
+--- Locate and get Elements ---
+
+System.setProperty("webdriver.chrome.driver", "/Users/path...");
+WebDriver driver = new ChromeDriver();
+driver.get("https://www.someurl.com/");
+driver.findElement(By.linkText("TEXT")).click();
+WebDriverWait wait = new WebDriverWait(driver, 10);
+wait.until(ExpectedConditions.urlToBe("https://www.someurl.com/"));
+
+# id
+driver.findElement(By.id("first-name")).sendKeys("FirstName");
+
+# name
+driver.findElement(By.name("field-keywords")).sendKeys("Some text");
+
+# class
+driver.findElement(By.className("nav-input")).click();
+
+# static wait
+Thread.sleep();
+
+# partial link text
+driver.findElement(By.partialLinkText("Partial text")).click();
+
+# get text
+string productTitle = driver.findElement(By.id("productTitle")).getText();
+
+
+--- XPath Basics ---
+
+# XPath using Attributes
+- //input[@aria-label="First name"]
+- //input[@aria-label="Last name"]
+
+driver.findElement(By.xpath("//input[@aria-label="First name"]")).sendKeys("name");
+
+# XPath using Text
+- //div[text()="Sign Up"]
+
+driver.findElement(By.xpath("//div[text()="Sign Up"]")).click();
+
+# Xpath using Dynamic Elements
+
+# and
+- //input[@id='ap_email' and @type='email']
+
+# or
+- //input[@value='Sign in' or @value='Log in']
+
+# contains
+- //img[contains(@title,'Some title')]
+- //p[contains(text(),'Some title')]
+
+# starts with
+- //img[starts-with(@title,'Some title')]
+- //p[starts-with(text(),'Some title')]
+
+# hybrid
+- //img[starts-with(@title,'Some title') or contains(text(),'Some title')]
+- //*[starts-with(text(),'Some title')]
+
+
+--- Xpath Axis ---
+
+# Parent - Child
+- //div[@id='fbindex_UIPage']/child::*
+- //div[@id='fbindex_UIPage']/child::span
+- //div[@id='fbindex_UIPage']/child::div[1]
+- //div[@id='u_0_11']/parent::*
+
+# Ancestor - Descendant
+# descendats (child > child > child...)
+- //div[@id='u_0_11']/descendant::*
+- //div[@id='u_0_11']/descendant::div
+- //div[@id='u_0_11']/descendant::div[1]
+- //div[@id='pageFooter']/ancestor::*
+- //div[@id='pageFooter']/ancestor::div[2]
+
+# Preceding - Following
+# Preceding - enything that comes before, but without the ancestors
+# preceding-sibling - everything before, but only inside the siblings, the sibling before the used element
+# Following - enything that follows after, but without the descendats
+# following-sibling - everything after, but only inside the siblings, the sibling after the used element
+- //div[@id='pageFooter']/preceding::*
+- //div[@id='pageFooter']/preceding::a[1]
+- //div[@id='pageFooter']/preceding-sibling::div[2]
+- //div[@id='pageFooter']/following::div[15]
+- //div[@id='pageFooter']/following-sibling::div[2]
+- //div[@id='pageFooter']/following-sibling::span
+
+# Absolute XPath vs Relative XPath
+# // for relative xpath and searching in the whole document
+# The absolute xpath uses the complete path from the root element. Due to dynamic nature of a web page it could be assumed that absolute xpath is not going to work every time, it's not recommended
+# A combination of relative and absolute xpath might be used
+- /html/body/div[1]/span/img
+- //div[@class='_li']/div[2]/div/div
+
+
+--- CSS Selectors ---
+# Cascading Style Sheets - describes the style of the page
+# CSS Selector - represents the element for which the styling can be provided
+# Similar to the xpath without using '//' and '@'
+# TagName[Att1=Value]
+# id => # (hash)
+# class => . (dot)
+
+driver.findElement(By.cssSelector("i.hm-icon")).click();
+
+--- CSS Basics ---
+
+# Using Attributes
+- div[id='email']
+- input[name='firstName']
+- div#email
+- div.email
+
+# Dynamic Elements
+# partial value
+- input[data-testid*='email']
+# starts with
+- input[data-testid^='email']
+# ends with
+- input[data-testid$='email']
+
+# Multiple Attributes
+# and
+- input[type='submit'][value='Sign in']
+# or
+- input[value='Log in'],input[value='Sign in']
+
+
+--- CSS Selectors Advance --- 
+
+# Using only TagName and AttributeName
+- a
+- div
+- a[class]
+- input[class]
+- [class]
+
+# Node1, Node2
+- a,li
+- a[class],li[abc]
+
+# Node1 Node2 => all Node2 inside of Node1. All Node2 are descendant of Node1
+- #u_0_12 *
+- #u_0_12 div
+
+# Node1 > Node2 => all Node2 are children of Node1. From Parent to Child
+- #u_0_12>div
+
+# Node1+Node2 => sibling Node2 exact after Node1. Jump to the immidiate next simbling
+- #u_0_12+div
+
+# Node1~Node2 => Jump to the all following simblings. Next all Node2 simblings of Node1
+- #u_0_12~div
+
+# CSS Selectors using Child-Node Numbering
+# Node1:first-child
+# Node1:last-child
+#Node1:nth-child(n)
+- #u_0_11>div:first-child
+- #u_0_11>div:nth-child(2)
+- #u_0_11>*:nth-child(3)
+- #u_0_11>*:last-child
+- a:last-child
+- input:nth-child(9)
